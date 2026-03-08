@@ -2,7 +2,7 @@ import json
 import os
 from solcx import compile_standard, install_solc # type: ignore
 
-install_solc("0.2.20")
+install_solc("0.8.20")
 
 with open("contracts/Voting.sol", "r") as f1:
     source = f1.read()
@@ -23,7 +23,7 @@ compiled = compile_standard( # type: ignore
             }
         },
     },
-    solc_version="0.2.20",
+    solc_version="0.8.20",
 )
 
 os.makedirs("build", exist_ok=True)

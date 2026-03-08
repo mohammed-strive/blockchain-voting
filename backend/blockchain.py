@@ -1,10 +1,9 @@
 import json
 import os
-from dotenv import load_dotenv
-from eth_typing import 
+from dotenv import load_dotenv, find_dotenv
 from web3 import Web3
 
-load_dotenv()
+load_dotenv(find_dotenv(), override=True)
 
 
 class BlockChainService:
@@ -30,7 +29,7 @@ class BlockChainService:
         transaction = func.build_transaction(
             {
                 "from": self.account,
-                "nounce": nounce,
+                "nonce": nounce,
                 "gas": 300_000,
                 "gasPrice": self.w3.eth.gas_price,
             }
@@ -51,7 +50,7 @@ class BlockChainService:
         return {
             "tx_hash": receipt.transactionHash.hex(),
             "proposal_id": proposal_id,
-            "block_numner": receipt.BlockNumber,
+            "block_number": receipt.blockNumber,
         }
     
     def vote(self, proposal_id: int) -> dict:
@@ -60,7 +59,7 @@ class BlockChainService:
 
         return {
             "tx_hash": receipt.transactionHash.hex(),
-            "block_number": receipt.BlockNumber,
+            "block_number": receipt.blockNumber,
         }
 
     def get_proposal(self, proposal_id: int) -> dict:

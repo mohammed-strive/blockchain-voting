@@ -1,25 +1,28 @@
 import os
 import json
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 from web3 import Web3
 
 
-load_dotenv()
+load_dotenv(find_dotenv(), override=True)
 
 RPC_URL = os.getenv("SEPOLIA_RPC_URL")
 PRIVATE_KEY = os.getenv("PRIVATE_KEY")
 ACCOUNT = os.getenv("WALLET_ADDRESS")
 
+print(RPC_URL)
+print(PRIVATE_KEY)
+print(ACCOUNT)
+
 w3 = Web3(Web3.HTTPProvider(RPC_URL))
-assert w3.is_connected(), "cannot connect to Sepolia RPC"
 
 with open("build/abi.json", "r") as f:
     abi = json.load(f)
 
-with open("build/Voting.sol", "r") as f:
+with open("build/Voting.json", "r") as f:
     compiled = json.load(f)
 
-bytecode = compiled["contracts"]["Voting.sol"]["evm"]["bytecode"]["object"]
+bytecode = compiled["contracts"]["Voting.sol"]["Voting"]["evm"]["bytecode"]["object"]
 contract = w3.eth.contract(abi=abi, bytecode=bytecode)
 
 nonce = w3.eth.get_transaction_count(ACCOUNT)
@@ -41,4 +44,4 @@ contract_address = receipt.contractAddress
 print(f"Contract deployed at: {contract_address}")
 
 with open(".env", "a") as f:
-    f.writelines([f"CONTRACT_ADDRESS={contract_address}"])
+    f.write(f"\nCONTRACT_ADDRESS={contract_address}\n")

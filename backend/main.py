@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from blockchain import BlockChainService
-from schemas import ProposalCreate, ProposalResponse, TransactionResponse
+from backend.blockchain import BlockChainService
+from backend.schemas import ProposalCreate, ProposalResponse, TransactionResponse
 
 app = FastAPI(
     title="Voting API - BlockChain",
@@ -37,6 +37,7 @@ def create_proposal(body: ProposalCreate):
             message="Proposal create: Success",
         )
     except Exception as e:
+        print(str(e))
         raise HTTPException(status_code=400, detail=str(e))
 
 
@@ -53,6 +54,7 @@ def get_proposal(proposal_id: int):
     try:
         return blockchain.get_proposal(proposal_id=proposal_id)
     except Exception as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 @app.post("/proposals/{proposal_id}/vote", response_model=TransactionResponse)
 def cast_vote(proposal_id: int):
@@ -90,6 +92,3 @@ def check_has_voted(address: str, proposal_id: int):
         }
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
-            
-            
-        }

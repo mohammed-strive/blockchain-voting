@@ -1,1 +1,6 @@
 build/
+.vscode/
+**/__pycache__/*
+cache/
+out/
+.DS_Store
