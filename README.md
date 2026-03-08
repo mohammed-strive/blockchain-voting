@@ -24,4 +24,9 @@ Tests for the service are in the [tests](./tests/) directory.
 
 Run the tests from the root folder - `python -m unittest discover -s tests`
 
-To run the solidity test for the contract file, you'll the need `forge` toolset. Run `forge test` inside the [voting-foundry](./voting-foundry/)
+To run the solidity test for the contract file, you'll the need `forge` toolset. Run the following commands in the project root to test the contract.
+
+- `forge init forge-voting`
+- `cp contracts/Voting.sol forge-voting/src/Voting.sol`
+- `cp tests/Voting.t.sol forge-voting/tests/Voting.t.sol`
+- `forge test`
