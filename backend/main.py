@@ -41,7 +41,7 @@ def create_proposal(body: ProposalCreate):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.get("/proposals/{proposal_id}", response_model=list[ProposalResponse])
+@app.get("/proposals", response_model=list[ProposalResponse])
 def list_proposals():
     try:
         return blockchain.get_all_proposals()
@@ -56,6 +56,7 @@ def get_proposal(proposal_id: int):
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))
 
+
 @app.post("/proposals/{proposal_id}/vote", response_model=TransactionResponse)
 def cast_vote(proposal_id: int):
     try:
@@ -63,10 +64,11 @@ def cast_vote(proposal_id: int):
         return TransactionResponse(
             tx_hash=res["tx_hash"],
             block_number=res["block_number"],
-            message=f"Vote casted for Proposal: #{proposal_id}"
-    )
+            message=f"Vote casted for Proposal: #{proposal_id}",
+        )
     except Exception as e:
-            raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=str({"error": "already voted"}))
+
 
 @app.get("/proposals/{proposal_id}/results")
 def get_results(proposal_id: int):
@@ -81,14 +83,11 @@ def get_results(proposal_id: int):
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))
 
+
 @app.get("/voters/{address}/voted/{proposal_id}")
-def check_has_voted(address: str, proposal_id: int):
+def check_has_voted(address: int, proposal_id: int):
     try:
-        voted = blockchain.has_voted(proposal_id=proposal_id, address=address)
-        return {
-            "address": address,
-            "proposal_id": proposal_id,
-            "has_voted": voted
-        }
+        voted = blockchain.has_voted(proposal_id=proposal_id, address=hex(address))
+        return {"address": address, "proposal_id": proposal_id, "has_voted": True}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

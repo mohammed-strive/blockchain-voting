@@ -1,0 +1,28 @@
+GET http://localhost:8000/health
+
+###
+
+POST http://localhost:8000/proposals
+Content-Type: application/json
+
+{
+    "title": "This is a new proposal",
+    "description": "This proposal is about testing the API."
+}
+
+###
+
+GET http://localhost:8000/proposals
+
+###
+GET http://localhost:8000/proposals/1
+
+###
+POST http://localhost:8000/proposals/1/vote
+
+###
+
+GET http://localhost:8000/proposals/1/results
+
+###
+GET http://localhost:8000/voters/546584486846459126461364135121053344201067465379/voted/1
